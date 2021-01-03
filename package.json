@@ -6,22 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/irfan-zahir/offlinekaishabot.git"
-  },
   "author": "OfflineKaisha",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/irfan-zahir/offlinekaishabot/issues"
-  },
-  "homepage": "https://github.com/irfan-zahir/offlinekaishabot#readme",
   "dependencies": {
     "cjson": "^0.5.0",
     "discord.js": "^12.5.1",
     "firebase": "^8.2.1",
     "firebase-admin": "^9.4.2"
   },
-  "BOT_TOKEN": "Nzk1MjM0OTg4OTI4NTMyNDkx.X_GaTA.akLMC0WOzZJMad7v1v_gH5mAqQs",
+  "BOT_TOKEN": "Nzk1MjM0OTg4OTI4NTMyNDkx.X_GaTA.oiliV71KyFp5PwFbsRdg3-uxdYQ",
   "PREFIX": "!"
 }
