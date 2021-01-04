@@ -14,7 +14,6 @@
     "firebase": "^8.2.1",
     "firebase-admin": "^9.4.2"
   },
-  "BOT_TOKEN": "Nzk1MjM0OTg4OTI4NTMyNDkx.X_GaTA.czYCMJuBuySAyL5-y_KBgeifoEI",
   "PREFIX": "!",
   "type": "module"
 }

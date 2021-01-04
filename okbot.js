@@ -6,7 +6,7 @@ import firebase_admin from 'firebase-admin'
 const config = cjson.load('./package.json');
 const service_account = cjson.load('./service-account.json');
 
-const token = config.BOT_TOKEN
+const token = process.env.BOT_TOKEN
 const prefix = config.PREFIX
 
 const bot = new discord.Client()
