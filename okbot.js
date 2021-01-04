@@ -20,7 +20,7 @@ firebase_admin.initializeApp({
 });
 
 const workingHours = 4*60
-const msWH = 30000
+const msWH = 4 * 60 * 60 * 1000
 const reminder = []
 
 bot.on('message', message=>{
