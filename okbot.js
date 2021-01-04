@@ -7,10 +7,11 @@ const config = cjson.load('./package.json');
 const service_account = cjson.load('./service-account.json');
 
 const token = process.env.BOT_TOKEN
+const channelid = process.env.CHANNEL_ID
 const prefix = config.PREFIX
 
 const bot = new discord.Client()
-bot.login('Nzk1MjM0OTg4OTI4NTMyNDkx.X_GaTA.czYCMJuBuySAyL5-y_KBgeifoEI').then(()=>{
+bot.login(token).then(()=>{
     console.log(`${bot.user.username} is now online`);
 })
 
@@ -23,8 +24,7 @@ const msWH = 30000
 const reminder = []
 
 bot.on('message', message=>{
-    //clockin restricted = 794112635519631370
-    if(message.channel.id == '794112635519631370')
+    if(message.channel.id == channelid)
     if(!message.mentions.has(bot.user.id)){
         if(!message.content.startsWith(prefix))return;
         
