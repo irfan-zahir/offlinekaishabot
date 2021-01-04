@@ -10,7 +10,7 @@ const token = process.env.BOT_TOKEN
 const prefix = config.PREFIX
 
 const bot = new discord.Client()
-bot.login(token).then(()=>{
+bot.login('Nzk1MjM0OTg4OTI4NTMyNDkx.X_GaTA.czYCMJuBuySAyL5-y_KBgeifoEI').then(()=>{
     console.log(`${bot.user.username} is now online`);
 })
 
@@ -19,6 +19,7 @@ firebase_admin.initializeApp({
 });
 
 const workingHours = 4*60
+const msWH = 30000
 const reminder = []
 
 bot.on('message', message=>{
@@ -34,28 +35,62 @@ bot.on('message', message=>{
         const database = new FirebaseService(message.author.username)
         database.create_user({name: message.author.username, id: message.author.id})
 
-        if(command === "clockin") clockIn(message)
-        if(command === "break") breakstart(message)
-        if(command === "breakin") breakin(message)
-        if(command === "clockout") clockout(message)
-        if(command === "report") todayReport(message)
-        if(command === "timer") {
+        // if(command === "clockin") clockIn(message)
+        // // if(command === "break") breakstart(message)
+        // // if(command === "breakin") breakin(message)
+        // if(command === "clockout") clockout(message)
+        // if(command === "report") todayReport(message)
+        if(command === "in") {
             const user = message.author.username
             reminder.push({
                 user: user,
-                callback: setTimeout(() => {
-                    message.channel.send(`beep boop ${message.author.username}`)
-                }, 10000),
+                callback: new timer(() => {
+                    endOfWork(message)
+                }, msWH),
             })
             startTimer(message)
         }
+        if(command === "break") breaks(message)
+        if(command === "return") breakend(message)
     }
 })
 
+function endOfWork(message){
+    const user = message.author.username
+    const index = reminder.findIndex(o => o.user === user)
+    reminder.splice(index, 1)
+    message.channel.send(`Otsukare ${user}! Habis dah kerja harini`)
+}
+
 function startTimer(message){
-    message.channel.send(`${message.author.username} is expected to reminded in 10secs`)
-    let obj = reminder.find(o=> o.user === message.author.username)
+    const user = message.author.username
+    message.channel.send(`${user} is expected to reminded in 45secs`)
+    let obj = reminder.find(o=> o.user === user)
     obj.callback
+}
+
+function breaks(message){
+    const user = message.author.username
+    let obj = reminder.find(o=> o.user === user)
+    obj.callback.pause()
+    const remained = obj.callback.getTimeLeft()
+    const time = timeLeft(remained)
+    message.channel.send(`Have a good break! Make sure to !return ye, ada lagi ${time} ni hehe`)
+}
+
+function breakend(message){
+    const user = message.author.username
+    let obj = reminder.find(o=> o.user === user)
+    const remained = obj.callback.getTimeLeft()
+    const time = timeLeft(remained)
+    message.channel.send(`Okairinasai! Another ${time} to go!`)
+}
+
+function timeLeft (time){
+    //time is in ms
+    const hrs = parseInt((time / (60 * 60 * 1000)) % 24)
+    const mins = parseInt((time / (1000 * 60)) % 60)
+    return `${hrs} hrs and ${mins} minutes`
 }
 
 async function clockIn(message){
@@ -193,4 +228,35 @@ class FirebaseService {
     async getTodayData(date){
         return await this.firestore.collection('workingdata').where('date', '==', date).get()
     }
+}
+
+function timer(callback, delay) {
+    var id, started, remaining = delay, running
+
+    this.start = function() {
+        running = true
+        started = new Date()
+        id = setTimeout(callback, remaining)
+    }
+
+    this.pause = function() {
+        running = false
+        clearTimeout(id)
+        remaining -= new Date() - started
+    }
+
+    this.getTimeLeft = function() {
+        if (running) {
+            this.pause()
+            this.start()
+        }
+
+        return remaining
+    }
+
+    this.getStateRunning = function() {
+        return running
+    }
+
+    this.start()
 }
